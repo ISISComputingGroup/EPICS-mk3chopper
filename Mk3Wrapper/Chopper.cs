@@ -40,15 +40,37 @@ namespace Mk3Wrapper
             return 0;
         }
 
+        public int GetNumberEnabledChannels(ref uint result)
+        {
+            try
+            {
+                // This is our canary! It reports when the connection is null - chopper not initialised
+                if (_beamline == null) return -1;
+
+                MK3ChopperSkeleton.ResultContainer res = _beamline.GetNumberOfEnabledChannels();
+                result = res.uintResult;
+            }
+            catch (RemotingTimeoutException exception)
+            {
+                return -3;
+            }
+            catch
+            {
+                return -4;
+            }
+
+            return 0;
+        }
+
         public int GetActualFreq(uint channel, ref double result)
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
 
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleActualSpeed(channel);
                 result = res.doubleResult;
+
             }
             catch (RemotingTimeoutException exception)
             {
@@ -66,7 +88,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
+                if (_beamline == null) return 0;
 
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleActualDelay(channel);
                 result = res.uintResult;
@@ -87,8 +109,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleActualErrorWindow(channel);
                 result = res.intResult;
             }
@@ -108,8 +129,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetAllowedDemandSpeeds(channel);
                 result = new List<double>(res.doubleArray);
             }
@@ -129,8 +149,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetBeamLineName();
                 result = res.stringResult;
             }
@@ -150,6 +169,8 @@ namespace Mk3Wrapper
         {
             try
             {
+                if (_beamline == null) return 0;
+
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetChannelsCurrentSettings();
                 result = res.stringResult;
             }
@@ -169,8 +190,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetChopperName(channel);
                 result = res.stringResult;
             }
@@ -190,8 +210,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetChopperType(channel);
                 result = res.stringResult;
             }
@@ -211,6 +230,7 @@ namespace Mk3Wrapper
         {
             try
             {
+                if (_beamline == null) return 0;
                 string chopperType = "";
                 int err = GetChopperType(channel, ref chopperType);
                 if (err != 0)
@@ -248,8 +268,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetComputerMode();
                 result = res.boolResult;
             }
@@ -269,8 +288,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleFirmwareVersion(channel);
                 result = res.intResult;
             }
@@ -290,8 +308,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleMPPeriod(channel);
                 result = res.intResult;
             }
@@ -311,8 +328,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetStoredDemandDiscAngle(channel);
                 result = res.doubleResult;
             }
@@ -332,6 +348,8 @@ namespace Mk3Wrapper
         {
             try
             {
+                if (_beamline == null) return 0;
+
                 string chopperType = "";
                 int err = GetChopperType(channel, ref chopperType);
                 if (err != 0)
@@ -365,8 +383,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleDemandSpeed(channel);
                 result = res.doubleResult;
             }
@@ -386,8 +403,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleDemandErrorWindow(channel);
                 result = res.uintResult;
             }
@@ -407,30 +423,8 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleDemandDelay(channel);
-                result = res.uintResult;
-            }
-            catch (RemotingTimeoutException exception)
-            {
-                return -3;
-            }
-            catch
-            {
-                return -4;
-            }
-
-            return 0;
-        }
-
-        public int GetNumberEnabledChannels(ref uint result)
-        {
-            try
-            {
-                if (_beamline == null) Initialise();
-
-                MK3ChopperSkeleton.ResultContainer res = _beamline.GetNumberOfEnabledChannels();
                 result = res.uintResult;
             }
             catch (RemotingTimeoutException exception)
@@ -449,8 +443,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleSoftwareVersion(channel);
                 result = res.intResult;
             }
@@ -470,8 +463,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetModuleStatusRegister(channel);
 
                 List<bool> ans = new List<bool>();
@@ -499,8 +491,7 @@ namespace Mk3Wrapper
         {
             try
             {
-                if (_beamline == null) Initialise();
-
+                if (_beamline == null) return 0;
                 MK3ChopperSkeleton.ResultContainer res = _beamline.GetTotalNumberOfChannels();
                 result = res.intResult;
             }
@@ -530,6 +521,7 @@ namespace Mk3Wrapper
 
         public int PutNominalDirection(uint channel, bool cw, ref int result)
         {
+            if (_beamline == null) return 0;
             string chopperType = "";
             int err = GetChopperType(channel, ref chopperType);
 
@@ -568,8 +560,7 @@ namespace Mk3Wrapper
 
         public int PutNominalFreq(uint channel, double speed, ref double result)
         {
-            if (_beamline == null) Initialise();
-
+            if (_beamline == null) return 0;
             MK3ChopperSkeleton.ResultContainer res = _beamline.SetStoredDemandSpeed(channel, speed);
             if (res.error)
             {
@@ -596,8 +587,7 @@ namespace Mk3Wrapper
 
         public int PutNominalPhaseErrorWindow(uint channel, uint error, ref uint result)
         {
-            if (_beamline == null) Initialise();
-
+            if (_beamline == null) return 0;
             MK3ChopperSkeleton.ResultContainer res = _beamline.SetStoredDemandErrorWindow(channel, error);
             if (res.error)
             {
@@ -623,8 +613,7 @@ namespace Mk3Wrapper
 
         public int PutNominalPhase(uint channel, uint phase, ref uint result)
         {
-            if (_beamline == null) Initialise();
-
+            if (_beamline == null) return 0;
             MK3ChopperSkeleton.ResultContainer res = _beamline.SetStoredDemandDelay(channel, phase);
             if (res.error)
             {
@@ -775,6 +764,5 @@ namespace Mk3Wrapper
 
             return errorMsg;
         }
-
     }
 }
