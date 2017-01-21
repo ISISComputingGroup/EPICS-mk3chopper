@@ -14,12 +14,42 @@ if /I "%EPICS_HOST_ARCH%" == "windows-x64" (
     call msbuild.exe /p:Configuration=Release;Platform=x64 Mk3_Chopper.sln
 )
     
+if /I "%EPICS_HOST_ARCH%" == "windows-x64-static-debug" (
+    set BUILD_DIR=x64\Debug
+    call msbuild.exe /p:Configuration=Debug;Platform=x64 Mk3_Chopper.sln
+)
+
+if /I "%EPICS_HOST_ARCH%" == "windows-x64-static" (
+    set BUILD_DIR=x64\Release
+    call msbuild.exe /p:Configuration=Release;Platform=x64 Mk3_Chopper.sln
+)
+
+if /I "%EPICS_HOST_ARCH%" == "windows-x64-static_md-debug" (
+    set BUILD_DIR=x64\Debug
+    call msbuild.exe /p:Configuration=Debug;Platform=x64 Mk3_Chopper.sln
+)
+
+if /I "%EPICS_HOST_ARCH%" == "windows-x64-static_md" (
+    set BUILD_DIR=x64\Release
+    call msbuild.exe /p:Configuration=Release;Platform=x64 Mk3_Chopper.sln
+)
+
 if /I "%EPICS_HOST_ARCH%" == "win32-x86-debug" (
     set BUILD_DIR=Debug
     call msbuild.exe /p:Configuration=Debug;Platform=x86 Mk3_Chopper.sln
 )
 
 if /I "%EPICS_HOST_ARCH%" == "win32-x86" (
+    set BUILD_DIR=Release
+    call msbuild.exe /p:Configuration=Release;Platform=x86 Mk3_Chopper.sln
+)
+
+if /I "%EPICS_HOST_ARCH%" == "win32-x86-static-debug" (
+    set BUILD_DIR=Debug
+    call msbuild.exe /p:Configuration=Debug;Platform=x86 Mk3_Chopper.sln
+)
+
+if /I "%EPICS_HOST_ARCH%" == "win32-x86-static" (
     set BUILD_DIR=Release
     call msbuild.exe /p:Configuration=Release;Platform=x86 Mk3_Chopper.sln
 )
