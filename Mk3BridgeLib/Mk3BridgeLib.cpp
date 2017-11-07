@@ -585,17 +585,9 @@ namespace Mk3BridgeLib
 	void Mk3Chopper::StringToCharArray(String^ str, char* result, int size)
 	{
 		using namespace Runtime::InteropServices;
-
-		// If size is less than 50 don't bother
-		if (size < 50)
-		{
-			return;
-		}
 		IntPtr p = Marshal::StringToHGlobalAnsi(str);
 		strncpy_s(result, size, static_cast<char*>(p.ToPointer()), size-1);
 		Marshal::FreeHGlobal(p);
-
-		return;
 	}
 }
 
