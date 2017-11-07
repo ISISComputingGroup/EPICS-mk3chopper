@@ -591,9 +591,8 @@ namespace Mk3BridgeLib
 		{
 			return;
 		}
-
 		IntPtr p = Marshal::StringToHGlobalAnsi(str);
-		strcpy(result, static_cast<char*>(p.ToPointer()));
+		strncpy_s(result, size, static_cast<char*>(p.ToPointer()), size-1);
 		Marshal::FreeHGlobal(p);
 
 		return;
