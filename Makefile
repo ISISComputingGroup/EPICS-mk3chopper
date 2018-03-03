@@ -11,3 +11,5 @@ clean:
 	unbuild.bat
 
 uninstall:
+	$(RMDIR) $(TOP)/bin/$(EPICS_HOST_ARCH)
+	$(RMDIR) $(TOP)/lib/$(EPICS_HOST_ARCH)
