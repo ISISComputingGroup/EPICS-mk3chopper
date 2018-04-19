@@ -14,16 +14,18 @@ namespace Mk3BridgeLib
 	{
 		int errCode = 0;
 
-		if (useMock)
-		{
-			chopper = gcnew Mk3Wrapper::MockChopper(gcnew System::String(configFile));
-			errCode = chopper->Initialise();
+		if (chopper == nullptr) {
+			if (useMock)
+			{
+				chopper = gcnew Mk3Wrapper::MockChopper(gcnew System::String(configFile));
+			}
+			else
+			{
+				chopper = gcnew Mk3Wrapper::Chopper(gcnew System::String(configFile));
+			}
 		}
-		else
-		{
-			chopper = gcnew Mk3Wrapper::Chopper(gcnew System::String(configFile));
-			errCode = chopper->Initialise();
-		}
+
+		errCode = chopper->Initialise();
 
 		return errCode;
 	}
