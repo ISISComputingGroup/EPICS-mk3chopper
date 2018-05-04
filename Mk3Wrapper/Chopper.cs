@@ -9,8 +9,8 @@ namespace Mk3Wrapper
     public class Chopper : IChopper
     {
         string configFile = "";
-        static MK3ChopperSkeleton.IBeamLine _beamline = null;
-		static bool remotingSetConfigured = false;
+        MK3ChopperSkeleton.IBeamLine _beamline = null;
+        bool remotingSetConfigured = false;
 
         public Chopper(string configFile)
         {
@@ -33,29 +33,29 @@ namespace Mk3Wrapper
         {
             try
             {
-				if (!remotingSetConfigured) {
+                if (!remotingSetConfigured) {
                     // Does remoting configuration file exist
                     if (!File.Exists(this.configFile))
                     {
                         return -5;
                     }
-					RemotingConfiguration.Configure(configFile, false);
-					remotingSetConfigured = true;
-					
-				}
+                    RemotingConfiguration.Configure(configFile, false);
+                    remotingSetConfigured = true;
+                    
+                }
                 // setup proxy
-				if (_beamline == null) {
-					_beamline = (MK3ChopperSkeleton.IBeamLine)MK3ChopperSkeleton.RemotingHelper.CreateProxy(typeof(MK3ChopperSkeleton.IBeamLine));
-					if (!RemotingServices.IsTransparentProxy(_beamline))
-					{
-						throw new RemotingException("Proxy To Server Could Not Be Established");
-					}
-				}
+                if (_beamline == null) {
+                    _beamline = (MK3ChopperSkeleton.IBeamLine)MK3ChopperSkeleton.RemotingHelper.CreateProxy(typeof(MK3ChopperSkeleton.IBeamLine));
+                    if (!RemotingServices.IsTransparentProxy(_beamline))
+                    {
+                        throw new RemotingException("Proxy To Server Could Not Be Established");
+                    }
+                }
                 _beamline.ServerHealthy();  // Check that server is ok
             }
             catch
             {
-				_beamline = null;
+                _beamline = null;
                 return -6;
             }
 
