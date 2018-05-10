@@ -10,30 +10,52 @@ namespace Mk3Wrapper
     {
         string configFile = "";
         MK3ChopperSkeleton.IBeamLine _beamline = null;
-        MK3ChopperSkeleton.RemotingHelper _helper;
+        bool remotingSetConfigured = false;
 
         public Chopper(string configFile)
         {
             this.configFile = configFile;
+
         }
 
+        /**
+         * Initialise the connection to the chopper server.
+         *  - intiallise the remoting based on the config file, this can be done without a remote machine
+         *  - create a proxy and make sure it connects. If there is already a working proxy don't create a second one.
+         *  - if proxy can not connect then blank it and error
+         *  
+         * Returns:
+         *  0 everything was ok
+         *  -5 configuration file does not exist
+         *  -6 proxy can not be created or can not connect to the sever
+         */
         public int Initialise()
         {
-            // Does file exist?
-            if (!File.Exists(this.configFile))
-            {
-                return -5;
-            }
-
             try
             {
-                RemotingConfiguration.Configure(configFile, false);
-
-                _helper = new MK3ChopperSkeleton.RemotingHelper();
-                _beamline = (MK3ChopperSkeleton.IBeamLine)MK3ChopperSkeleton.RemotingHelper.CreateProxy();
+                if (!remotingSetConfigured) {
+                    // Does remoting configuration file exist
+                    if (!File.Exists(this.configFile))
+                    {
+                        return -5;
+                    }
+                    RemotingConfiguration.Configure(configFile, false);
+                    remotingSetConfigured = true;
+                    
+                }
+                // setup proxy
+                if (_beamline == null) {
+                    _beamline = (MK3ChopperSkeleton.IBeamLine)MK3ChopperSkeleton.RemotingHelper.CreateProxy(typeof(MK3ChopperSkeleton.IBeamLine));
+                    if (!RemotingServices.IsTransparentProxy(_beamline))
+                    {
+                        throw new RemotingException("Proxy To Server Could Not Be Established");
+                    }
+                }
+                _beamline.ServerHealthy();  // Check that server is ok
             }
             catch
             {
+                _beamline = null;
                 return -6;
             }
 

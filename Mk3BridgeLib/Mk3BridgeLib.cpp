@@ -9,21 +9,29 @@ using namespace System::Collections::Generic;
 
 namespace Mk3BridgeLib
 {
-
+    /** Initialise the chopper framework and connect to it.
+     *  NB Although it appears you can change the config file here for each initialise because of implementation details
+     *  you can't it will use the first one you set.
+     *  @param configFile configuration file for the .net remoting
+     *  @param useMock if true use the mocked version of the chopper which simulates connecting to a real chopper; False for
+     *       real connection
+    */
 	int Mk3Chopper::Initialise(char* configFile, bool useMock)
 	{
 		int errCode = 0;
 
-		if (useMock)
-		{
-			chopper = gcnew Mk3Wrapper::MockChopper(gcnew System::String(configFile));
-			errCode = chopper->Initialise();
+		if (chopper == nullptr) {
+			if (useMock)
+			{
+				chopper = gcnew Mk3Wrapper::MockChopper(gcnew System::String(configFile));
+			}
+			else
+			{
+				chopper = gcnew Mk3Wrapper::Chopper(gcnew System::String(configFile));
+			}
 		}
-		else
-		{
-			chopper = gcnew Mk3Wrapper::Chopper(gcnew System::String(configFile));
-			errCode = chopper->Initialise();
-		}
+
+		errCode = chopper->Initialise();
 
 		return errCode;
 	}

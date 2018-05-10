@@ -18,6 +18,9 @@ if /I "%EPICS_HOST_ARCH%" == "win32-x86" (
 
 if %ERRORLEVEL% neq 0 goto PROBLEM
 
+rmdir /S /Q bin\%EPICS_HOST_ARCH%
+rmdir /S /Q lib\%EPICS_HOST_ARCH%
+
 GOTO :EOF
 
 :PROBLEM
