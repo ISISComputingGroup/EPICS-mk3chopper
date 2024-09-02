@@ -1,3 +1,7 @@
+REM
+REM when changing also need to update values in  Mk3ChopperApp/src/Makefile
+REM
+
 for /F "tokens=1,2,3 delims=. " %%a in ("%VSCMD_VER%") do (
    set VS_MAJOR=%%a
    set VS_MINOR=%%b
