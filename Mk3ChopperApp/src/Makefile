@@ -25,9 +25,19 @@ ifneq ($(findstring debug,$(EPICS_HOST_ARCH)),)
 VS_CONFIG=Debug
 endif
 
+ifeq ($(VS_MAJOR),17)
+# VS2022
+PLATFORM_TOOLSET=v143
+TARGET_FRAMEWORK_VERSION=v4.7.2
+else
+# VS2019
+PLATFORM_TOOLSET=v142
+TARGET_FRAMEWORK_VERSION=v4.0
+endif
+
 # passing WindowsTargetPlatformVersion=$(WindowsTargetPlatformVersion)
 # is not needed for VS2019 as we can set 10.0 in the project file for "latest 10"
-MSBUILD_OPTS = /p:Configuration=$(VS_CONFIG);Platform=$(VS_PLATFORM)
+MSBUILD_OPTS = /p:Configuration=$(VS_CONFIG);Platform=$(VS_PLATFORM);PlatformToolset=$(PLATFORM_TOOLSET);TargetFrameworkVersion=$(TARGET_FRAMEWORK_VERSION)
 MSBUILD_OUTPUT_DIR := $(MSBUILD_OUTPUT_DIR)/$(VS_CONFIG)
 
 include $(TOP)/configure/RULES
