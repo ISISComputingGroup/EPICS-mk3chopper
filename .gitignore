@@ -201,3 +201,8 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 .project
+
+__pycache__/
+*.py[cod]
+*$py.class
+test-reports/
