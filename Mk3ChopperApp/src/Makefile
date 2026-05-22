@@ -25,6 +25,11 @@ ifneq ($(findstring debug,$(EPICS_HOST_ARCH)),)
 VS_CONFIG=Debug
 endif
 
+ifeq ($(VS_MAJOR),18)
+# VS2026
+PLATFORM_TOOLSET=v145
+TARGET_FRAMEWORK_VERSION=v4.7.2
+else
 ifeq ($(VS_MAJOR),17)
 # VS2022
 PLATFORM_TOOLSET=v143
@@ -33,6 +38,7 @@ else
 # VS2019
 PLATFORM_TOOLSET=v142
 TARGET_FRAMEWORK_VERSION=v4.0
+endif
 endif
 
 # passing WindowsTargetPlatformVersion=$(WindowsTargetPlatformVersion)
